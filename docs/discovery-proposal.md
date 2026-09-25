@@ -1,10 +1,10 @@
-# Agent NetPilot：Discovery 待确认提案
+# 云驿（yunyi）：Discovery 待确认提案
 
 历史提案：用户已于本对话确认方向。后续spike、完整规格和审查结果见docs/sdd-review.md；下列环境描述保留初次扫描时的事实。
 
 ## 原始目标
 
-依据用户提供的 Agent NetPilot 0.1.0 工程设计稿，实现本地 Coding Harness 的弱网韧性层。保留 CLI、Daemon、SQLite、MCP、规划、离线执行、恢复与回滚的整体交付范围。先完成最小闭环，再扩展并发。
+依据用户提供的 云驿（yunyi） 0.1.0 工程设计稿，实现本地 Coding Harness 的弱网韧性层。保留 CLI、Daemon、SQLite、MCP、规划、离线执行、恢复与回滚的整体交付范围。先完成最小闭环，再扩展并发。
 
 ## 工作流与当前环境
 

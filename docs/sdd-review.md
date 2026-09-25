@@ -1,14 +1,16 @@
-# Agent NetPilot 规格审阅入口
+# 云驿（yunyi） 规格审阅入口
 
-当前阶段：Discovery与依赖spike已执行；三份完整requirements/design/tasks等待用户确认具体行为边界。尚未进入kiro-impl，没有产品代码，也没有开启并行实现。
+当前阶段：命名迁移已完成；Discovery与依赖spike已执行，三份完整requirements/design/tasks仍等待用户逐份确认。命名迁移的确认不等于规格批准。尚未进入kiro-impl，没有产品代码，也没有开启并行实现。
+
+新旧名称及历史证据映射见[命名迁移说明](naming-migration.md)。本文链接指向迁移后的规格，原始实验结果保持原样；新机械追踪结果为[evidence/yunyi-sdd-mechanical-check.json](evidence/yunyi-sdd-mechanical-check.json)。
 
 ## 规格包
 
 | 规格 | 内容 | 需求 | 设计 | 任务 |
 |---|---|---|---|---|
-| netpilot-foundation | 配置、网络状态、模型、账本、日志 | [requirements](../.kiro/specs/netpilot-foundation/requirements.md) | [design](../.kiro/specs/netpilot-foundation/design.md) | [tasks](../.kiro/specs/netpilot-foundation/tasks.md) |
-| netpilot-execution | 策略、进程、执行、快照、回滚、核对 | [requirements](../.kiro/specs/netpilot-execution/requirements.md) | [design](../.kiro/specs/netpilot-execution/design.md) | [tasks](../.kiro/specs/netpilot-execution/tasks.md) |
-| netpilot-integration | CLI、daemon、MCP、Harness、规划、验收 | [requirements](../.kiro/specs/netpilot-integration/requirements.md) | [design](../.kiro/specs/netpilot-integration/design.md) | [tasks](../.kiro/specs/netpilot-integration/tasks.md) |
+| yunyi-foundation | 配置、网络状态、模型、账本、日志 | [requirements](../.kiro/specs/yunyi-foundation/requirements.md) | [design](../.kiro/specs/yunyi-foundation/design.md) | [tasks](../.kiro/specs/yunyi-foundation/tasks.md) |
+| yunyi-execution | 策略、进程、执行、快照、回滚、核对 | [requirements](../.kiro/specs/yunyi-execution/requirements.md) | [design](../.kiro/specs/yunyi-execution/design.md) | [tasks](../.kiro/specs/yunyi-execution/tasks.md) |
+| yunyi-integration | CLI、daemon、MCP、Harness、规划、验收 | [requirements](../.kiro/specs/yunyi-integration/requirements.md) | [design](../.kiro/specs/yunyi-integration/design.md) | [tasks](../.kiro/specs/yunyi-integration/tasks.md) |
 
 共72条可验收需求、40个执行单元（其中2项真实CLI前置spike已完成，38项产品/工具链实施任务待执行）。方向已于本对话获确认；各spec.json的具体requirements/design/tasks批准字段保持false，避免把方向确认冒充规格批准。
 

@@ -1,0 +1,7 @@
+# 规划中的配置模板；产品安装并创建example会话后才可使用。
+[mcp_servers.yunyi]
+command = "D:/anaconda3/envs/pack311/python.exe"
+args = ["-m", "yunyi", "mcp", "--session", "example"]
+
+[mcp_servers.yunyi.env]
+YUNYI_SESSION_ID = "example"

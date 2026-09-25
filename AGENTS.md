@@ -78,6 +78,9 @@ Use a fresh context for each independent implementer or reviewer, passing the ta
 
 ## 本项目执行约束
 
+- 项目名为云驿（yunyi），当前规格目录为yunyi-foundation、yunyi-execution、yunyi-integration。命名迁移与产品行为实现分开提交；旧名仅保留于历史证据及兼容说明。
+- 用户要求命名迁移提交后停止汇报；未获逐份规格批准不得进入kiro-impl，也不得把命名迁移批准写入spec的requirements/design/tasks批准字段。
+
 - 始终使用简体中文。Python使用已验conda解释器 `D:/anaconda3/envs/pack311/python.exe`；禁止裸python/python3。
 - 用户要求：superpowers贯穿，cc-sdd完整discovery/requirements/design/tasks，依赖先spike，通过后kiro-impl，强制agentic-tdd真实RED；最小闭环之前仅一条串行实现流水线。
 - 当前为规格审阅阶段；具体审批以各spec.json为准，不把用户确认discovery路线当作具体行为需求已批准。

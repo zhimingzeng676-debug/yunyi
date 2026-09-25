@@ -1,4 +1,4 @@
-# Brief: netpilot-execution
+# Brief: yunyi-execution
 
 ## 问题与当前状态
 断网时预生成任务不能丢失；命令可能超时、产生副作用或在写账本前崩溃。已有依赖试验证明数据库事务不能回滚外部副作用。
@@ -14,7 +14,7 @@
 - CommandPolicy、OfflineExecutor、SnapshotStore、RollbackService、RecoveryService、ProcessJob。
 
 ## 上下游与约束
-- 上游：netpilot-foundation 的 Repository、Models、AuditLog。
-- 下游：netpilot-integration 的 daemon/CLI/MCP 调用。
+- 上游：yunyi-foundation 的 Repository、Models、AuditLog。
+- 下游：yunyi-integration 的 daemon/CLI/MCP 调用。
 - 既有规格扩展：无。与 Harness 共享目录时，未能确保执行权交接就不自动写入。
 - 默认并发为一；危险动作由用户本地授权，模型不能自行批准。

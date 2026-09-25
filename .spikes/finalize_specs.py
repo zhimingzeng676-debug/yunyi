@@ -6,7 +6,7 @@ from pathlib import Path
 root = Path(__file__).resolve().parents[1]
 template = (root / '.kiro/settings/templates/specs/init.json').read_text(encoding='utf-8')
 stamp = datetime.now(timezone.utc).isoformat()
-for name in ('netpilot-foundation','netpilot-execution','netpilot-integration'):
+for name in ('yunyi-foundation','yunyi-execution','yunyi-integration'):
     folder = root / '.kiro/specs' / name
     draft = folder / 'tasks.draft.md'
     target = folder / 'tasks.md'

@@ -1,6 +1,6 @@
 # 实施任务：CLI、MCP 与 Harness 集成
 
-完整串行任务清单，独立审查通过，用户批准待定。前置：netpilot-foundation 4.2、netpilot-execution 4.2 通过。先完成第1至3组最小闭环，再考虑并发候选；所有行为单元使用完整 agentic-tdd。
+完整串行任务清单，独立审查通过，用户批准待定。前置：yunyi-foundation 4.2、yunyi-execution 4.2 通过。先完成第1至3组最小闭环，再考虑并发候选；所有行为单元使用完整 agentic-tdd。
 
 实施入口总门禁：Claude/Codex各一次真实受限结构化调用spike现已通过，证据见docs/evidence/*-live-spike.json；4.1/4.2作为提前执行的依赖验证记录保留。规格内容尚未获用户批准，当前不进入kiro-impl。真实MCP宿主连接、TTY和断网恢复仍属于实现后的产品验收，不能以本次ready请求替代。
 

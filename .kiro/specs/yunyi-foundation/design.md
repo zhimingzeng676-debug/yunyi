@@ -47,14 +47,14 @@ flowchart LR
 | 文件 | 职责 |
 |---|---|
 | pyproject.toml | 包元数据、Python 下限、依赖、测试配置；最初可安装包，不提前注册尚不存在的 CLI |
-| src/netpilot/__init__.py | 版本，无启动副作用 |
-| src/netpilot/models.py | 不含业务 IO 的严格输入输出模型 |
-| src/netpilot/config.py | 合并配置、解析路径、参数验证 |
-| src/netpilot/state_machine.py | 状态转移与连续计数 |
-| src/netpilot/network.py | 并行目标探测、滑窗、等待、取消 |
-| src/netpilot/persistence.py | Repository 和迁移调度 |
-| src/netpilot/migrations/001_initial.sql | 所有基础表、约束和索引 |
-| src/netpilot/observability.py | JSONL 事件脱敏、限长与指标 |
+| src/yunyi/__init__.py | 版本，无启动副作用 |
+| src/yunyi/models.py | 不含业务 IO 的严格输入输出模型 |
+| src/yunyi/config.py | 合并配置、解析路径、参数验证 |
+| src/yunyi/state_machine.py | 状态转移与连续计数 |
+| src/yunyi/network.py | 并行目标探测、滑窗、等待、取消 |
+| src/yunyi/persistence.py | Repository 和迁移调度 |
+| src/yunyi/migrations/001_initial.sql | 所有基础表、约束和索引 |
+| src/yunyi/observability.py | JSONL 事件脱敏、限长与指标 |
 | tests/unit/test_models.py、test_config.py、test_state_machine.py、test_network.py、test_observability.py | 对应契约的行为测试 |
 | tests/integration/test_persistence.py | 真实多连接事务与崩溃恢复测试 |
 | tests/conftest.py | 本地隔离路径、注入时钟，不注入生产行为 |
@@ -66,7 +66,9 @@ flowchart LR
 ### Config
 
 `load_config(path: Path | None, environ: Mapping[str,str], overrides: dict) -> Config`。
-支持四个原始 NETPILOT 环境变量；其他键不从任意环境隐式获取。默认数据库位于用户目录 `.netpilot/netpilot.db`；工作区取会话创建时解析的绝对路径，后续不能偷偷替换。
+支持四个 YUNYI 环境变量（SESSION_ID、DB_PATH、LOG_LEVEL、OFFLINE_MODE）；其他键不从任意环境隐式获取。默认数据库位于用户目录 `.yunyi/yunyi.db`；工作区取会话创建时解析的绝对路径，后续不能偷偷替换。
+
+命名兼容约定：进程启动解析配置时，新变量存在则采用新变量（空值仍按既有规则校验），仅当新变量不存在时一次性读取对应 NETPILOT_* 旧名；两者不合并、不回写环境，使用旧名时每进程仅提示一次弃用信息且不输出变量值。该别名解析仍属于原配置任务1.2，不增加或重排任务。历史数据迁移见docs/naming-migration.md；本轮仅迁移命名约定，没有实现配置读取器。
 
 network 字段：targets 列表含 id/url/role，primary_target，probe_interval_ms=3000，timeout_ms=2000，stable_success_threshold=3，offline_failure_threshold=3，healthy_latency_ms=1000，stable_window_min_seconds=30。
 offline：max_parallel=1、max_output_bytes=65536、snapshot_limit_bytes=104857600、step_timeout_seconds=120、retry_limit=0。所有数值有有限上界；targets 1..8，超时不超过 30000ms，单步骤不超过 3600s。
@@ -152,7 +154,7 @@ schema_version 通过 PRAGMA user_version；迁移在排他短事务中执行，
 回滚父状态pending/running/applied/partial/conflict/needs_reconciliation，子状态pending/running/applied/conflict/failed/needs_reconciliation。一个operation按已冻结的逆序子清单推进；子running必须先提交才可有副作用，恢复发现旧owner死亡后进入needs_reconciliation而非pending；结果提交失败同样保持未知。start/end事件与对应状态变更同事务。Repository不持有OS工作区锁，但调用者必须在整个副作用期间持锁，不能把数据库事务当成该锁。
 
 ### AuditLog
-JSONL 在 `.netpilot/logs/`，字段固定 event、timestamp、session_id、correlation_id、status、reason_code。递归屏蔽 key/token/authorization/password 字段；命令原始 argv 可含秘密，因此默认只存 profile、程序 basename 和参数 hash，不存全参数。输出摘要按可配置敏感字串和常见凭据格式脱敏后限长；不能保证识别所有秘密，原始全文捕获默认关闭。日志文件按 10MiB 轮换，最多 5 份；账本审计不依赖轮换文件。
+JSONL 在 `.yunyi/logs/`，字段固定 event、timestamp、session_id、correlation_id、status、reason_code。递归屏蔽 key/token/authorization/password 字段；命令原始 argv 可含秘密，因此默认只存 profile、程序 basename 和参数 hash，不存全参数。输出摘要按可配置敏感字串和常见凭据格式脱敏后限长；不能保证识别所有秘密，原始全文捕获默认关闭。日志文件按 10MiB 轮换，最多 5 份；账本审计不依赖轮换文件。
 
 ## 错误处理
 ConfigError、InvalidPlan、SessionMismatch、Conflict、StaleLease、StorageBusy、StorageUnavailable、SchemaTooNew 均有稳定 code 和安全 message。无吞异常重试；busy 最长 5s 后显式返回。输出日志失败应显示降级，前检查点失败必须阻止执行。

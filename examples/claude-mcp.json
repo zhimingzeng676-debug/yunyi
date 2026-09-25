@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "yunyi": {
+      "command": "D:/anaconda3/envs/pack311/python.exe",
+      "args": ["-m", "yunyi", "mcp", "--session", "example"],
+      "env": {"YUNYI_SESSION_ID": "example"}
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "baseline_commit": "d80b5e4",
+  "passed": true,
+  "specs": [
+    {
+      "spec": "yunyi-foundation",
+      "tasks": 13,
+      "completed": 0
+    },
+    {
+      "spec": "yunyi-execution",
+      "tasks": 10,
+      "completed": 0
+    },
+    {
+      "spec": "yunyi-integration",
+      "tasks": 17,
+      "completed": 2
+    }
+  ],
+  "approvals_unchanged": true,
+  "task_order_and_requirements_unchanged": true,
+  "historical_committed_blobs_preserved": 32,
+  "existing_worktree_line_ending_differences": [
+    "docs/evidence/check-state.json",
+    "docs/evidence/claude-launcher-discovery-failure.json",
+    "docs/evidence/claude-live-spike.json",
+    "docs/evidence/codex-live-spike.json",
+    "docs/evidence/dependency-spikes-before-fix.log",
+    "docs/evidence/dependency-spikes.log",
+    "docs/evidence/final-spike-tests.log",
+    "docs/evidence/generate-report.json",
+    "docs/evidence/init-state.json",
+    "docs/evidence/log-event.json",
+    "docs/evidence/preflight-verification.json",
+    "docs/evidence/python-dependencies.lock",
+    "docs/evidence/sdd-mechanical-check.json",
+    "docs/evidence/state-completed.json",
+    "docs/evidence/state-green.json",
+    "docs/evidence/state-red.json",
+    "docs/evidence/tampered-green-negative-control.json",
+    "docs/evidence/tdd-red-tests.log",
+    "docs/evidence/tdd-red-tests.xml",
+    "docs/evidence/verifier-negative-control.json",
+    "docs/evidence/verify-green.json",
+    "docs/evidence/verify-red.json",
+    "docs/evidence/windows-job.log",
+    "docs/source-design.md"
+  ],
+  "examples_parse": true,
+  "spec_and_entry_links_valid": true,
+  "product_code_created": false,
+  "legacy_user_data_exists": false,
+  "new_user_data_exists": false,
+  "spike_database_files": []
+}

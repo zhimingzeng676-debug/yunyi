@@ -37,6 +37,6 @@ for folder in sorted((root / '.kiro' / 'specs').iterdir()):
             problems.append('missing section: ' + heading)
     results.append({'spec':folder.name,'requirements':len(ids),'tasks':len(task_ids),'problems':problems})
 artifact = {'passed':all(not r['problems'] for r in results),'specs':results,'limitations':'Checks references and required sections only; no approval or semantic GO implied.'}
-(root / 'docs' / 'evidence' / 'sdd-mechanical-check.json').write_text(json.dumps(artifact,ensure_ascii=False,indent=2),encoding='utf-8')
+(root / 'docs' / 'evidence' / 'yunyi-sdd-mechanical-check.json').write_text(json.dumps(artifact,ensure_ascii=False,indent=2),encoding='utf-8')
 print(json.dumps(artifact,ensure_ascii=False,indent=2))
 raise SystemExit(0 if artifact['passed'] else 1)

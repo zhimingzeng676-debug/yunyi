@@ -2,7 +2,7 @@
 from mcp.server.fastmcp import FastMCP
 from pydantic import BaseModel
 
-server = FastMCP('netpilot-dependency-spike')
+server = FastMCP('yunyi-dependency-spike')
 
 class EchoResult(BaseModel):
     session_id: str

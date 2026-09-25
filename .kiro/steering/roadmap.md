@@ -1,4 +1,4 @@
-# Agent NetPilot 路线图
+# 云驿（yunyi） 路线图
 
 ## 概览
 
@@ -32,9 +32,9 @@
 
 ## Specs (dependency order)
 
-- [ ] netpilot-foundation — 配置、网络观测、持久化、模型与日志。Dependencies: none
-- [ ] netpilot-execution — 安全动作、离线调度、检查点、精确回滚与恢复。Dependencies: netpilot-foundation
-- [ ] netpilot-integration — CLI、daemon、MCP、Harness、规划及端到端集成。Dependencies: netpilot-foundation, netpilot-execution
+- [ ] yunyi-foundation — 配置、网络观测、持久化、模型与日志。Dependencies: none
+- [ ] yunyi-execution — 安全动作、离线调度、检查点、精确回滚与恢复。Dependencies: yunyi-foundation
+- [ ] yunyi-integration — CLI、daemon、MCP、Harness、规划及端到端集成。Dependencies: yunyi-foundation, yunyi-execution
 
 ## 验收与并发顺序
 

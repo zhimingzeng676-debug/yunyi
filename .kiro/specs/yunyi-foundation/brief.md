@@ -1,4 +1,4 @@
-# Brief: netpilot-foundation
+# Brief: yunyi-foundation
 
 ## 问题与当前状态
 弱网下的本地开发者缺少可信的网络状态和可恢复任务账本；当前只有设计稿与隔离 spike，无产品代码。
@@ -15,6 +15,6 @@
 
 ## 上下游与约束
 - 上游：Python 3.11+ 与已验依赖。
-- 下游：netpilot-execution 和 netpilot-integration。
+- 下游：yunyi-execution 和 yunyi-integration。
 - 既有规格扩展：无；本规格拥有共享数据契约，禁止下游另建平行模型。
 - 所有技术变更以实际 spike 为证据；SQLite 3.51.1 禁用多连接 WAL。

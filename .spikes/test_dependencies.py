@@ -1,4 +1,4 @@
-"""Executable dependency experiments; not NetPilot implementation tests."""
+"""Executable dependency experiments; not Yunyi implementation tests."""
 import asyncio
 import hashlib
 import json
@@ -214,7 +214,7 @@ def test_mcp_stdio_handshake_schema_call_and_error():
         async with stdio_client(params) as (read, write):
             async with ClientSession(read, write, read_timeout_seconds=timedelta(seconds=10)) as session:
                 info = await session.initialize()
-                assert info.serverInfo.name == 'netpilot-dependency-spike'
+                assert info.serverInfo.name == 'yunyi-dependency-spike'
                 listed = await session.list_tools()
                 assert [t.name for t in listed.tools] == ['echo_session']
                 assert set(listed.tools[0].inputSchema['required']) == {'session_id', 'value'}

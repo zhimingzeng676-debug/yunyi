@@ -46,13 +46,13 @@ flowchart TD
 
 | 文件 | 职责 |
 |---|---|
-| src/netpilot/policy.py | 本地动作审批与规范化 hash |
-| src/netpilot/workspace_lock.py | Windows 字节范围锁及交接凭证校验 |
-| src/netpilot/process_job.py | 挂起创建、Job 附加、恢复启动、输出排空与进程树清理 |
-| src/netpilot/offline_executor.py | 步骤驱动循环、有限重试与收尾 |
-| src/netpilot/snapshots.py | 路径、快照、hash 与容量控制 |
-| src/netpilot/rollback.py | 精确逆序恢复及补偿 |
-| src/netpilot/recovery.py | 孤儿核对、报告、版本化决策 |
+| src/yunyi/policy.py | 本地动作审批与规范化 hash |
+| src/yunyi/workspace_lock.py | Windows 字节范围锁及交接凭证校验 |
+| src/yunyi/process_job.py | 挂起创建、Job 附加、恢复启动、输出排空与进程树清理 |
+| src/yunyi/offline_executor.py | 步骤驱动循环、有限重试与收尾 |
+| src/yunyi/snapshots.py | 路径、快照、hash 与容量控制 |
+| src/yunyi/rollback.py | 精确逆序恢复及补偿 |
+| src/yunyi/recovery.py | 孤儿核对、报告、版本化决策 |
 | tests/unit/test_policy.py、test_executor.py、test_recovery.py | 状态与策略测试 |
 | tests/integration/test_process_job.py、test_workspace_lock.py、test_snapshots.py、test_rollback.py、test_crash_recovery.py | Windows、文件、锁和真实崩溃验证 |
 
@@ -72,7 +72,7 @@ flowchart TD
 - 高风险已拒绝动作不能用通用 --yes 绕过；确需支持先调整具名本地策略再重审。
 
 ### WorkspaceLock
-`acquire(workspace: Path, owner_id: str) -> WorkspaceLease`；Windows `msvcrt.locking` 锁本地 `.netpilot/locks/<normalized_path_hash>.lock` 的首字节，文件句柄活到执行结束。锁只协调 NetPilot，不阻止第三方编辑器。
+`acquire(workspace: Path, owner_id: str) -> WorkspaceLease`；Windows `msvcrt.locking` 锁本地 `.yunyi/locks/<normalized_path_hash>.lock` 的首字节，文件句柄活到执行结束。锁只协调 Yunyi，不阻止第三方编辑器。
 
 `HandoffEvidence`：generation、harness_process_identity、mode(cooperative|process_suspended|none)、verified_at、writer_permission。集成层只有在合作停止新工作且当前本地写操作完毕，或用户已结束 Harness 后，才能发 writer_permission。普通 psutil 暂停仅 best_effort，不自动赋予 writer_permission；默认仅允许无写操作或等待用户。
 
@@ -88,7 +88,7 @@ Windows 流程：解析 exe → CreateProcess(CREATE_SUSPENDED，隐藏非交互
 ### SnapshotStore
 `prepare(action, lease) -> SnapshotManifest`；`inspect(manifest) -> list[FileObservation]`；`restore(manifest, expected_after) -> RollbackResult`。
 
-- 默认 `.netpilot/snapshots/<session>/<attempt>/`，内容寻址 blob；manifest 含相对路径、是否存在、SHA256、长度、只读属性、必要 mtime、快照格式版本。
+- 默认 `.yunyi/snapshots/<session>/<attempt>/`，内容寻址 blob；manifest 含相对路径、是否存在、SHA256、长度、只读属性、必要 mtime、快照格式版本。
 - 拒绝绝对路径、`..`、盘符/UNC、NTFS ADS、保留设备名、末尾点/空格歧义、任何父目录/文件的 reparse point 或 junction。普通文件只接受单硬链接；拒绝无法证明归属的目录入口。
 - 内置 file_write 仅支持 UTF-8 文本普通文件，原有字节原样备份；不创建/删除目录树，不操作 symlink、注册表或远程对象。
 - 写快照到同目录临时文件，flush+fsync，再 os.replace；manifest 提交后才可写目标。容量默认每步 100MiB，计划预估超限提前拒绝。
@@ -121,7 +121,7 @@ restart 流程：取得工作区锁 → 验证旧所有者 pid/create_time 不�
 
 apply_decision也在同一工作区锁内重验report_version、当前审批及交接，调用RollbackService时借用ExecutionContext；只读build_report可以不持写锁，但每份报告版本必须来自一致数据库快照。多会话共享目录时，任一回滚/恢复副作用与其他会话正向执行互斥。
 
-云端返回 decision 只是建议；不能签发 local_approval。netpilot recover 无云也可导出报告及列出待确认决策。
+云端返回 decision 只是建议；不能签发 local_approval。yunyi recover 无云也可导出报告及列出待确认决策。
 
 ## 错误与安全
 稳定错误码：policy_denied、approval_required、workspace_busy、handoff_unverified、unsupported_platform、job_assignment_failed、path_escape、snapshot_corrupt、snapshot_limit、rollback_conflict、stale_report、needs_reconciliation。

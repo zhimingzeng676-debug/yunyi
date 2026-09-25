@@ -47,15 +47,15 @@ flowchart LR
 
 | 文件 | 职责 |
 |---|---|
-| src/netpilot/cli.py、__main__.py | Typer 七类命令及进程退出码 |
-| src/netpilot/app.py | 依赖组合，唯一接线位置 |
-| src/netpilot/daemon.py | 所有者锁、网络循环、执行交接、心跳 |
-| src/netpilot/wrapper.py | 受管 Harness 启停与终端继承 |
-| src/netpilot/harness.py | generic/claude/codex 能力描述与版本检查 |
-| src/netpilot/mcp_server.py | 八项工具、会话绑定、结构化错误 |
-| src/netpilot/planner.py | 预算、提示词、输出验证、计划提交 |
-| src/netpilot/planner_adapters.py | 导入、提示词导出、Claude/Codex 非交互调用 |
-| src/netpilot/prompts/plan.txt、recover.txt | 打包的中文模板与 schema 版本 |
+| src/yunyi/cli.py、__main__.py | Typer 七类命令及进程退出码 |
+| src/yunyi/app.py | 依赖组合，唯一接线位置 |
+| src/yunyi/daemon.py | 所有者锁、网络循环、执行交接、心跳 |
+| src/yunyi/wrapper.py | 受管 Harness 启停与终端继承 |
+| src/yunyi/harness.py | generic/claude/codex 能力描述与版本检查 |
+| src/yunyi/mcp_server.py | 八项工具、会话绑定、结构化错误 |
+| src/yunyi/planner.py | 预算、提示词、输出验证、计划提交 |
+| src/yunyi/planner_adapters.py | 导入、提示词导出、Claude/Codex 非交互调用 |
+| src/yunyi/prompts/plan.txt、recover.txt | 打包的中文模板与 schema 版本 |
 | tests/integration/test_cli.py、test_daemon.py、test_wrapper.py、test_mcp.py、test_planner.py | 分别测试真实接口组合 |
 | tests/fixtures/fake_harness.py、probe_server.py、fake_planner.py | 可控轨迹和协议，不进入产品包 |
 | tests/e2e/test_minimum_loop.py、test_train_scenario.py | 跨进程、文件与账本的完整闭环 |
@@ -86,7 +86,7 @@ pyproject 只由当前 integration 接线任务修改；其他并发候选不碰
 
 ### Daemon
 `async serve(config: Config, stop: Event) -> None`。
-以数据库绝对路径 hash 的 OS 文件锁做唯一性保障。runtime_owners 存启动 UUID、pid、create_time、每秒心跳；锁而非时间是互斥依据。wrapper 启动隐藏子进程 `pack311 -m netpilot daemon`，等待最多五秒出现当前 generation 心跳；启动超时清理自己创建的进程并报错，不误杀已有 daemon。
+以数据库绝对路径 hash 的 OS 文件锁做唯一性保障。runtime_owners 存启动 UUID、pid、create_time、每秒心跳；锁而非时间是互斥依据。wrapper 启动隐藏子进程 `pack311 -m yunyi daemon`，等待最多五秒出现当前 generation 心跳；启动超时清理自己创建的进程并报错，不误杀已有 daemon。
 
 状态变化事务写 network_events。OFFLINE 时关闭云规划入口，向 wrapper 发交接请求，只有执行层验证 HandoffEvidence 后才启动写步骤。RECOVERING 时立即设置 executor.stop，新任务停止领取，发可见提示；当前任务按其 deadline 收尾，随后生成恢复报告。稳定窗口足够且启用了云评估时请求 Planner。
 
@@ -100,7 +100,7 @@ Capabilities：name、version、interactive_tty、mcp_stdio、structured_plan、
 
 - 不修改 argv 内容；Windows .cmd/.ps1 启动器需要解析对应真实 node/exe 入口，不在 shell 字符串插值用户参数。无法安全解析则拒绝并提示真实可执行文件路径。
 - 交互 run 继承父控制台 stdio，不捕获并重放 TTY；无 TTY 时明确以管道模式运行，不能承诺所有交互特性。窗口及 Ctrl+C 行为纳入真实验收。
-- 环境继承只用于用户明确运行的 Harness，增加 NETPILOT_SESSION_ID、NETPILOT_DB_PATH、NETPILOT_OFFLINE_MODE；不得记录全环境。运行后不能靠改变父环境影响已启动进程，动态状态通过 MCP/事件提供。
+- 环境继承只用于用户明确运行的 Harness，增加 YUNYI_SESSION_ID、YUNYI_DB_PATH、YUNYI_OFFLINE_MODE；不得记录全环境。运行后不能靠改变父环境影响已启动进程，动态状态通过 MCP/事件提供。
 - psutil best_effort 暂停先验证 root 身份，登记后代及 create_time，暂停 root 后逐个受管后代，重新核查；仅恢复 pause_record 中由本系统暂停的存活身份。失败返回 partial，不触发自动写入授权。
 - 当前真实 Claude/Codex 不假定支持 cooperative_handoff；fake harness 通过协议 ack 测合作路径，真实客户端默认提示接管或由用户结束 Harness 后手动 offline-exec。
 - 原始在途云请求、远端推理与计费不被暂停；恢复时若连接失效，提示使用客户端自有 resume。不会在活跃进程上另起重复会话。
@@ -111,14 +111,14 @@ SDK FastMCP 1.30.0，八项工具全部用严格 Pydantic 输入和具名输出�
 
 | 工具 | 输入字段（均含 session_id） | 输出/作用 |
 |---|---|---|
-| netpilot_get_state | session_id | NetworkSnapshot + daemon_health |
-| netpilot_wait_for_stable | min_seconds[0..300], timeout_seconds[0..300] | satisfied、snapshot、reason；允许取消 |
-| netpilot_save_plan | plan:Plan | PlanReceipt，默认 draft/pending_approval |
-| netpilot_enqueue_tasks | plan_id、task_ids | 每项 accepted/pending_approval/rejected，不执行 |
-| netpilot_get_pending_tasks | limit[1..100]、cursor | 无令牌任务列表、next_cursor |
-| netpilot_checkpoint | task/step标识、attempt_id、version、state摘要 | observation checkpoint；不能推进执行步号 |
-| netpilot_rollback | checkpoint_id、operation_id、report_version | 检查本地审批后返回回滚结果，否则 approval_required |
-| netpilot_report_result | task/step标识、attempt_id、version、result摘要 | 已验证 attempt 的外部观察，不能替代执行器 finish_step 的终态提交 |
+| yunyi_get_state | session_id | NetworkSnapshot + daemon_health |
+| yunyi_wait_for_stable | min_seconds[0..300], timeout_seconds[0..300] | satisfied、snapshot、reason；允许取消 |
+| yunyi_save_plan | plan:Plan | PlanReceipt，默认 draft/pending_approval |
+| yunyi_enqueue_tasks | plan_id、task_ids | 每项 accepted/pending_approval/rejected，不执行 |
+| yunyi_get_pending_tasks | limit[1..100]、cursor | 无令牌任务列表、next_cursor |
+| yunyi_checkpoint | task/step标识、attempt_id、version、state摘要 | observation checkpoint；不能推进执行步号 |
+| yunyi_rollback | checkpoint_id、operation_id、report_version | 检查本地审批后返回回滚结果，否则 approval_required |
+| yunyi_report_result | task/step标识、attempt_id、version、result摘要 | 已验证 attempt 的外部观察，不能替代执行器 finish_step 的终态提交 |
 
 写工具每次重新校验绑定会话、归属与当前版本。attempt 信息仅传给受管 worker 的专用上下文，不由 pending_tasks 泄漏；不持有有效凭证的 Harness 可以查询但不能伪造完成。非执行器观察只存事实，不直接使步骤 succeeded。
 
