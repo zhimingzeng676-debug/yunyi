@@ -1,0 +1,328 @@
+...FF....FF.F.F.F..FFFFFFFFFFF                                           [100%]
+================================== FAILURES ===================================
+_______________ test_default_threshold_boundary[samples3-True] ________________
+
+samples = [True, True, True], expected = True
+
+    @pytest.mark.parametrize(
+        ("samples", "expected"),
+        [
+            ([], False),
+            ([True], False),
+            ([True, True], False),
+            ([True, True, True], True),
+            ([True, True, True, True], True),
+            ([False, False, False], False),
+        ],
+    )
+    def test_default_threshold_boundary(samples, expected):
+>       assert is_ready(samples) is expected
+E       assert False is True
+E        +  where False = is_ready([True, True, True])
+
+test_window.py:18: AssertionError
+_______________ test_default_threshold_boundary[samples4-True] ________________
+
+samples = [True, True, True, True], expected = True
+
+    @pytest.mark.parametrize(
+        ("samples", "expected"),
+        [
+            ([], False),
+            ([True], False),
+            ([True, True], False),
+            ([True, True, True], True),
+            ([True, True, True, True], True),
+            ([False, False, False], False),
+        ],
+    )
+    def test_default_threshold_boundary(samples, expected):
+>       assert is_ready(samples) is expected
+E       assert False is True
+E        +  where False = is_ready([True, True, True, True])
+
+test_window.py:18: AssertionError
+__________ test_failure_resets_trailing_success_count[samples3-True] __________
+
+samples = [True, True, True, False, True, True, ...], expected = True
+
+    @pytest.mark.parametrize(
+        ("samples", "expected"),
+        [
+            ([True, True, True, False], False),
+            ([True, True, False, True], False),
+            ([True, True, True, False, True, True], False),
+            ([True, True, True, False, True, True, True], True),
+            ([False, True, True, True], True),
+        ],
+    )
+    def test_failure_resets_trailing_success_count(samples, expected):
+>       assert is_ready(samples) is expected
+E       assert False is True
+E        +  where False = is_ready([True, True, True, False, True, True, ...])
+
+test_window.py:32: AssertionError
+__________ test_failure_resets_trailing_success_count[samples4-True] __________
+
+samples = [False, True, True, True], expected = True
+
+    @pytest.mark.parametrize(
+        ("samples", "expected"),
+        [
+            ([True, True, True, False], False),
+            ([True, True, False, True], False),
+            ([True, True, True, False, True, True], False),
+            ([True, True, True, False, True, True, True], True),
+            ([False, True, True, True], True),
+        ],
+    )
+    def test_failure_resets_trailing_success_count(samples, expected):
+>       assert is_ready(samples) is expected
+E       assert False is True
+E        +  where False = is_ready([False, True, True, True])
+
+test_window.py:32: AssertionError
+___________________ test_custom_threshold[samples1-1-True] ____________________
+
+samples = [True], threshold = 1, expected = True
+
+    @pytest.mark.parametrize(
+        ("samples", "threshold", "expected"),
+        [
+            ([], 1, False),
+            ([True], 1, True),
+            ([True, False], 1, False),
+            ([False, True], 1, True),
+            ([True], 2, False),
+            ([False, True, True], 2, True),
+            ([True, False, True], 2, False),
+            ([True, True, True], 4, False),
+            ([True, True, True, True], 4, True),
+            ([False, True, True, True, True, True], 4, True),
+        ],
+    )
+    def test_custom_threshold(samples, threshold, expected):
+>       assert is_ready(samples, threshold) is expected
+E       assert False is True
+E        +  where False = is_ready([True], 1)
+
+test_window.py:51: AssertionError
+___________________ test_custom_threshold[samples3-1-True] ____________________
+
+samples = [False, True], threshold = 1, expected = True
+
+    @pytest.mark.parametrize(
+        ("samples", "threshold", "expected"),
+        [
+            ([], 1, False),
+            ([True], 1, True),
+            ([True, False], 1, False),
+            ([False, True], 1, True),
+            ([True], 2, False),
+            ([False, True, True], 2, True),
+            ([True, False, True], 2, False),
+            ([True, True, True], 4, False),
+            ([True, True, True, True], 4, True),
+            ([False, True, True, True, True, True], 4, True),
+        ],
+    )
+    def test_custom_threshold(samples, threshold, expected):
+>       assert is_ready(samples, threshold) is expected
+E       assert False is True
+E        +  where False = is_ready([False, True], 1)
+
+test_window.py:51: AssertionError
+___________________ test_custom_threshold[samples5-2-True] ____________________
+
+samples = [False, True, True], threshold = 2, expected = True
+
+    @pytest.mark.parametrize(
+        ("samples", "threshold", "expected"),
+        [
+            ([], 1, False),
+            ([True], 1, True),
+            ([True, False], 1, False),
+            ([False, True], 1, True),
+            ([True], 2, False),
+            ([False, True, True], 2, True),
+            ([True, False, True], 2, False),
+            ([True, True, True], 4, False),
+            ([True, True, True, True], 4, True),
+            ([False, True, True, True, True, True], 4, True),
+        ],
+    )
+    def test_custom_threshold(samples, threshold, expected):
+>       assert is_ready(samples, threshold) is expected
+E       assert False is True
+E        +  where False = is_ready([False, True, True], 2)
+
+test_window.py:51: AssertionError
+___________________ test_custom_threshold[samples8-4-True] ____________________
+
+samples = [True, True, True, True], threshold = 4, expected = True
+
+    @pytest.mark.parametrize(
+        ("samples", "threshold", "expected"),
+        [
+            ([], 1, False),
+            ([True], 1, True),
+            ([True, False], 1, False),
+            ([False, True], 1, True),
+            ([True], 2, False),
+            ([False, True, True], 2, True),
+            ([True, False, True], 2, False),
+            ([True, True, True], 4, False),
+            ([True, True, True, True], 4, True),
+            ([False, True, True, True, True, True], 4, True),
+        ],
+    )
+    def test_custom_threshold(samples, threshold, expected):
+>       assert is_ready(samples, threshold) is expected
+E       assert False is True
+E        +  where False = is_ready([True, True, True, True], 4)
+
+test_window.py:51: AssertionError
+___________________ test_custom_threshold[samples9-4-True] ____________________
+
+samples = [False, True, True, True, True, True], threshold = 4, expected = True
+
+    @pytest.mark.parametrize(
+        ("samples", "threshold", "expected"),
+        [
+            ([], 1, False),
+            ([True], 1, True),
+            ([True, False], 1, False),
+            ([False, True], 1, True),
+            ([True], 2, False),
+            ([False, True, True], 2, True),
+            ([True, False, True], 2, False),
+            ([True, True, True], 4, False),
+            ([True, True, True, True], 4, True),
+            ([False, True, True, True, True, True], 4, True),
+        ],
+    )
+    def test_custom_threshold(samples, threshold, expected):
+>       assert is_ready(samples, threshold) is expected
+E       assert False is True
+E        +  where False = is_ready([False, True, True, True, True, True], 4)
+
+test_window.py:51: AssertionError
+_____________ test_nonpositive_threshold_is_rejected[samples0-0] ______________
+
+samples = [], threshold = 0
+
+    @pytest.mark.parametrize("threshold", [0, -1, -10])
+    @pytest.mark.parametrize("samples", [[], [False], [True, True, True]])
+    def test_nonpositive_threshold_is_rejected(samples, threshold):
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE ValueError
+
+test_window.py:57: Failed
+_____________ test_nonpositive_threshold_is_rejected[samples0--1] _____________
+
+samples = [], threshold = -1
+
+    @pytest.mark.parametrize("threshold", [0, -1, -10])
+    @pytest.mark.parametrize("samples", [[], [False], [True, True, True]])
+    def test_nonpositive_threshold_is_rejected(samples, threshold):
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE ValueError
+
+test_window.py:57: Failed
+____________ test_nonpositive_threshold_is_rejected[samples0--10] _____________
+
+samples = [], threshold = -10
+
+    @pytest.mark.parametrize("threshold", [0, -1, -10])
+    @pytest.mark.parametrize("samples", [[], [False], [True, True, True]])
+    def test_nonpositive_threshold_is_rejected(samples, threshold):
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE ValueError
+
+test_window.py:57: Failed
+_____________ test_nonpositive_threshold_is_rejected[samples1-0] ______________
+
+samples = [False], threshold = 0
+
+    @pytest.mark.parametrize("threshold", [0, -1, -10])
+    @pytest.mark.parametrize("samples", [[], [False], [True, True, True]])
+    def test_nonpositive_threshold_is_rejected(samples, threshold):
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE ValueError
+
+test_window.py:57: Failed
+_____________ test_nonpositive_threshold_is_rejected[samples1--1] _____________
+
+samples = [False], threshold = -1
+
+    @pytest.mark.parametrize("threshold", [0, -1, -10])
+    @pytest.mark.parametrize("samples", [[], [False], [True, True, True]])
+    def test_nonpositive_threshold_is_rejected(samples, threshold):
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE ValueError
+
+test_window.py:57: Failed
+____________ test_nonpositive_threshold_is_rejected[samples1--10] _____________
+
+samples = [False], threshold = -10
+
+    @pytest.mark.parametrize("threshold", [0, -1, -10])
+    @pytest.mark.parametrize("samples", [[], [False], [True, True, True]])
+    def test_nonpositive_threshold_is_rejected(samples, threshold):
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE ValueError
+
+test_window.py:57: Failed
+_____________ test_nonpositive_threshold_is_rejected[samples2-0] ______________
+
+samples = [True, True, True], threshold = 0
+
+    @pytest.mark.parametrize("threshold", [0, -1, -10])
+    @pytest.mark.parametrize("samples", [[], [False], [True, True, True]])
+    def test_nonpositive_threshold_is_rejected(samples, threshold):
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE ValueError
+
+test_window.py:57: Failed
+_____________ test_nonpositive_threshold_is_rejected[samples2--1] _____________
+
+samples = [True, True, True], threshold = -1
+
+    @pytest.mark.parametrize("threshold", [0, -1, -10])
+    @pytest.mark.parametrize("samples", [[], [False], [True, True, True]])
+    def test_nonpositive_threshold_is_rejected(samples, threshold):
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE ValueError
+
+test_window.py:57: Failed
+____________ test_nonpositive_threshold_is_rejected[samples2--10] _____________
+
+samples = [True, True, True], threshold = -10
+
+    @pytest.mark.parametrize("threshold", [0, -1, -10])
+    @pytest.mark.parametrize("samples", [[], [False], [True, True, True]])
+    def test_nonpositive_threshold_is_rejected(samples, threshold):
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE ValueError
+
+test_window.py:57: Failed
+=========================== short test summary info ===========================
+FAILED test_window.py::test_default_threshold_boundary[samples3-True] - asser...
+FAILED test_window.py::test_default_threshold_boundary[samples4-True] - asser...
+FAILED test_window.py::test_failure_resets_trailing_success_count[samples3-True]
+FAILED test_window.py::test_failure_resets_trailing_success_count[samples4-True]
+FAILED test_window.py::test_custom_threshold[samples1-1-True] - assert False ...
+FAILED test_window.py::test_custom_threshold[samples3-1-True] - assert False ...
+FAILED test_window.py::test_custom_threshold[samples5-2-True] - assert False ...
+FAILED test_window.py::test_custom_threshold[samples8-4-True] - assert False ...
+FAILED test_window.py::test_custom_threshold[samples9-4-True] - assert False ...
+FAILED test_window.py::test_nonpositive_threshold_is_rejected[samples0-0] - F...
+FAILED test_window.py::test_nonpositive_threshold_is_rejected[samples0--1] - ...
+FAILED test_window.py::test_nonpositive_threshold_is_rejected[samples0--10]
+FAILED test_window.py::test_nonpositive_threshold_is_rejected[samples1-0] - F...
+FAILED test_window.py::test_nonpositive_threshold_is_rejected[samples1--1] - ...
+FAILED test_window.py::test_nonpositive_threshold_is_rejected[samples1--10]
+FAILED test_window.py::test_nonpositive_threshold_is_rejected[samples2-0] - F...
+FAILED test_window.py::test_nonpositive_threshold_is_rejected[samples2--1] - ...
+FAILED test_window.py::test_nonpositive_threshold_is_rejected[samples2--10]
+18 failed, 12 passed in 0.78s

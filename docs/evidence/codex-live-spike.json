@@ -1,0 +1,11 @@
+{
+  "harness": "codex",
+  "elapsed_seconds": 18.98,
+  "exit_code": 0,
+  "timed_out": false,
+  "request_count_limit": 1,
+  "synthetic_prompt_only": true,
+  "stdout": "{\"type\":\"thread.started\",\"thread_id\":\"01a0da3d-43cc-7da2-81f6-cac8e2b6d62e\"}\n{\"type\":\"turn.started\"}\n{\"type\":\"item.completed\",\"item\":{\"id\":\"item_0\",\"type\":\"agent_message\",\"text\":\"{\\\"ready\\\":true}\"}}\n{\"type\":\"turn.completed\",\"usage\":{\"input_tokens\":20847,\"cached_input_tokens\":0,\"cache_write_input_tokens\":0,\"output_tokens\":15,\"reasoning_output_tokens\":0}}\n",
+  "stderr": "",
+  "response_file": "{\"ready\":true}"
+}

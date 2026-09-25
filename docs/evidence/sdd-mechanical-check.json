@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "specs": [
+    {
+      "spec": "netpilot-execution",
+      "requirements": 23,
+      "tasks": 10,
+      "problems": []
+    },
+    {
+      "spec": "netpilot-foundation",
+      "requirements": 25,
+      "tasks": 13,
+      "problems": []
+    },
+    {
+      "spec": "netpilot-integration",
+      "requirements": 24,
+      "tasks": 17,
+      "problems": []
+    }
+  ],
+  "limitations": "Checks references and required sections only; no approval or semantic GO implied."
+}

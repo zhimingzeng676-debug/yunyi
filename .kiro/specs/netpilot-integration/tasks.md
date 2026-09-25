@@ -1,0 +1,135 @@
+# 实施任务：CLI、MCP 与 Harness 集成
+
+完整串行任务清单，独立审查通过，用户批准待定。前置：netpilot-foundation 4.2、netpilot-execution 4.2 通过。先完成第1至3组最小闭环，再考虑并发候选；所有行为单元使用完整 agentic-tdd。
+
+实施入口总门禁：Claude/Codex各一次真实受限结构化调用spike现已通过，证据见docs/evidence/*-live-spike.json；4.1/4.2作为提前执行的依赖验证记录保留。规格内容尚未获用户批准，当前不进入kiro-impl。真实MCP宿主连接、TTY和断网恢复仍属于实现后的产品验收，不能以本次ready请求替代。
+
+- [ ] 1. 本地入口与生命周期
+- [ ] 1.1 建立应用组合与七类 CLI 骨架（约2小时）
+  - 注册安装入口，七类命令各自验证参数和稳定退出码。
+  - status、导入计划和导出恢复报告连到真实领域服务，其余未完成能力明确报错。
+  - 完成时 wheel 中入口可启动，帮助与错误不伪装功能已完成。
+  - _Boundary: CLI, ApplicationComposition_
+  - _Requirements: 1.1, 1.4, 4.4_
+- [ ] 1.2 实现 daemon 唯一所有者、心跳和状态发布（约3小时）
+  - 启动竞争、进程退出、旧 generation 和陈旧数据均有行为测试。
+  - 包装器等待启动有五秒上限，不误杀已有 daemon。
+  - 完成时多个读客户端看到同一状态序列，重启恢复正常。
+  - _Boundary: Daemon_
+  - _Requirements: 1.3, 1.4_
+- [ ] 1.3 实现 generic wrapper 与 fake harness 交接（约3小时）
+  - 保留 argv/stdio/退出码，登记进程身份，仅恢复本系统暂停的进程。
+  - 验证合作 ACK 与 best_effort 暂停区别，partial 不能许可自动写入。
+  - 完成时 fake harness 可暂停/恢复，不把在途请求标成已取消。
+  - _Boundary: HarnessAdapter, Wrapper_
+  - _Requirements: 1.2, 2.1, 2.2, 2.4_
+
+- [ ] 2. MCP 与无云规划路径
+- [ ] 2.1 实现 MCP 会话绑定、查询和等待（约2小时）
+  - SDK stdio 实测握手、get_state、wait_for_stable、get_pending_tasks。
+  - 校验输入输出 schema、取消、超时、跨会话和 stderr 日志。
+  - 完成时错误请求后下一次合法请求仍成功。
+  - _Depends: 1.2_
+  - _Boundary: MCPServer_
+  - _Requirements: 3.1, 3.2, 3.5_
+- [ ] 2.2 实现 MCP 计划、检查点、结果与回滚工具（约3小时）
+  - 实测另外五项工具与真实 Repository/Recovery 服务。
+  - 验证保存不自动执行、未授权入队、伪造终态、过期 attempt 和回滚审批。
+  - 完成时八工具全部可调用，写路径负例不会改变目标状态。
+  - _Boundary: MCPServer_
+  - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5_
+- [ ] 2.3 实现规划模板、导入与预算门禁（约2小时）
+  - 打包 plan/recover 模板，导入与 fake planner 输出走相同严格校验。
+  - 覆盖陈旧状态、预算不足、无效JSON、未知动作和保留原计划。
+  - 完成时无云凭据也可导出提示词、导入有效计划并通过 MCP 查询。
+  - _Boundary: Planner_
+  - _Requirements: 4.1, 4.2, 4.3, 4.4_
+
+- [ ] 3. 最小纵向闭环
+- [ ] 3.1 集成离线派发、恢复提示与有界收尾（约3小时）
+  - daemon 的 OFFLINE/RECOVERING 事件连到交接及执行服务。
+  - 测量首次恢复探测后五秒内发提示，当前步骤收尾前不重启冲突写入。
+  - 完成时没有安全交接只提示，有 ACK 和审批才会执行。
+  - _Depends: 1.3, 2.2, 2.3_
+  - _Boundary: IntegrationOrchestration_
+  - _Requirements: 2.1, 2.2, 2.3, 2.4_
+- [ ] 3.2 补齐本地七命令服务接线（约3小时）
+  - 将1.1中的未完成入口连接到已验领域服务：本地审批、手动offline-exec、recover决策、daemon --stop、run生命周期。
+  - 验证非终端拒绝交互审批、工作区交接失败、不存在会话、真实退出码与停止daemon的身份匹配。
+  - 完成时所有无云命令分支可实际使用；真实云分支明确 capability_unverified，不能成功返回占位结果。
+  - _Depends: 3.1_
+  - _Boundary: CLIIntegration_
+  - _Requirements: 1.1, 1.2, 1.3, 1.4, 3.3, 4.4_
+- [ ] 3.3 跑通并审查最小闭环（约3小时）
+  - 真实 MCP 客户端保存 fixture 计划，受控网络转离线后执行文件动作并落检查点。
+  - 再执行一条精确本地批准的只读fixture命令，验证真实ProcessJob、输出、审批与前后检查点。
+  - 恢复后重启进程、核对任务不重复，再回滚还原原始脏文件。
+  - 完成时完整日志、JUnit、RED/GREEN 与独立审查通过，才允许评估独立任务并发。
+  - _Boundary: IntegrationTests_
+  - _Requirements: 5.2, 5.5_
+
+- [ ] 4. 真实 Harness 与云规划
+- [x] 4.1 前置门禁：完成 Claude 受限调用 spike（约1小时）
+  - 在产品实现前的独立临时目录验证Claude真实参数、认证、禁用工具、结果envelope及退出清理。
+  - 保存版本和实际结果；不读取或展示密钥，不用假响应替代。
+  - 完成时结果允许Claude适配实现；无法验证则维持全局实现入口NO-GO。
+  - _Boundary: HarnessCompatibilitySpike_
+  - _Requirements: 2.5, 4.3, 5.3_
+  - 实测：原生exe，safe-mode、空tools、严格空MCP配置；5.28秒返回structured_output.ready=true，退出码0；不代表真实客户端断网恢复通过。
+- [x] 4.2 前置门禁：完成 Codex 受限调用 spike（约1小时）
+  - 在产品实现前验证Codex只读执行、独立临时目录、认证、JSON schema envelope和退出清理。
+  - 保留实际版本及结果，认证信息仅由CLI使用，不读写或记录秘密。
+  - 完成时结果允许Codex适配实现；无法验证则维持全局实现入口NO-GO。
+  - _Boundary: HarnessCompatibilitySpike_
+  - _Requirements: 2.5, 4.3, 5.3_
+  - 实测：exec、read-only、ephemeral、ignore-user-config、output-schema；18.98秒返回ready=true，退出码0，事件无命令/工具调用。
+- [ ] 4.3 实现已验证 Claude 规划适配器（约2小时）
+  - 只采用4.1证明有效的argv与schema，覆盖认证/超时/断网/无效结构。
+  - 保留原计划并清理自有进程，暴露已验版本和能力。
+  - 完成时Claude契约与真实冒烟通过，未验证能力保持unavailable。
+  - _Depends: 4.1_
+  - _Boundary: ClaudePlannerAdapter_
+  - _Requirements: 2.5, 4.1, 4.2, 4.3, 5.3_
+- [ ] 4.4 实现已验证 Codex 规划适配器（约2小时）
+  - 只采用4.2证明有效的argv与schema，覆盖认证/超时/断网/无效结构。
+  - 读取输出文件前验证类型和大小，保存计划仍通过共同验证入口。
+  - 完成时Codex契约与真实冒烟通过，未验证能力保持unavailable。
+  - _Depends: 4.2_
+  - _Boundary: CodexPlannerAdapter_
+  - _Requirements: 2.5, 4.1, 4.2, 4.3, 5.3_
+- [ ] 4.5 实现恢复云评估和本地决策接线（约2小时）
+  - 仅传授权摘要，返回决策绑定 report_version 且不能绕过本地审批。
+  - 云失败保持 pending_review，过期决策和重复回滚均被拒绝。
+  - 完成时成功建议可供确认，失败不触发擅自回滚。
+  - 完成本地plan/recover云分支与CLI接线，验证用户指定provider才发起真实请求。
+  - _Depends: 4.3, 4.4_
+  - _Boundary: RecoveryIntegration_
+  - _Requirements: 4.5, 2.4_
+
+- [ ] 5. 完整验收与交付
+- [ ] 5.1 完成默认时间尺度列车轨迹与多会话故障测试（约3小时）
+  - 使用真实30秒稳定/60秒离线轨迹，不更改主机真实网络。
+  - 覆盖会话隔离、同工作区竞争、daemon重启、MCP断连、磁盘失败与输出洪流。
+  - 完成时实际计时证明恢复提示符合界限，任务/快照/回滚均可核对。
+  - _Depends: 3.3_
+  - _Boundary: IntegrationTests_
+  - _Requirements: 1.3, 1.4, 2.3, 3.2, 5.1, 5.2_
+- [ ] 5.2 实现真实验收工具与兼容性报告（约2小时）
+  - 输出两种 Harness 连接、规划及恢复证据，未执行项保持未验收。
+  - 统计真实请求分母及失败类别；100次真实云调用需显式允许，不能默认消耗。
+  - 完成时工具区分模拟结果、真实样本和缺失前提，发布门禁拒绝不完整证据。
+  - _Depends: 4.3, 4.4, 4.5, 5.1_
+  - _Boundary: AcceptanceTooling_
+  - _Requirements: 5.3, 5.4, 5.5_
+- [ ] 5.3 完成可安装交付、中文文档和示例校验（约2小时）
+  - README、配置/计划/MCP示例、排障、兼容性与MIT许可证全部交付。
+  - wheel包含模板与迁移，无临时工具、spike、凭据或账本；示例实际被加载验证。
+  - 完成时运行全量测试、构建、安装冒烟、kiro-validate-impl及新鲜完成验证，生成最终报告。
+  - _Depends: 5.2_
+  - _Boundary: ReleaseIntegration_
+  - _Requirements: 1.1, 4.4, 5.5_
+
+## Implementation Notes
+- 3.3之前无并发。之后CLI文档、独立验收工具等是否并发须重新检查共享文件；本稿不预先授权并行修改app.py或pyproject。
+- 用户明确要求文档和许可证，因此5.3保留文档交付，优先于通用任务模板的“仅代码”建议。
+- 正式实现前不确定依赖先spike。4.1/4.2已通过的边界仅为受限联机结构化输出；改变参数或扩大能力时须补spike。

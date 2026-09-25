@@ -1,0 +1,33 @@
+{
+  "feature_name": "netpilot-integration",
+  "created_at": "2026-09-25T20:32:18.022906+00:00",
+  "updated_at": "2026-09-25T20:32:18.022906+00:00",
+  "language": "zh",
+  "phase": "tasks-generated",
+  "approvals": {
+    "requirements": {
+      "generated": true,
+      "approved": false
+    },
+    "design": {
+      "generated": true,
+      "approved": false
+    },
+    "tasks": {
+      "generated": true,
+      "approved": false
+    }
+  },
+  "ready_for_implementation": false,
+  "discovery": {
+    "path": "D",
+    "direction_confirmed": true,
+    "confirmation": "用户本对话确认多规格路线"
+  },
+  "review": {
+    "design": "GO",
+    "task_graph": "PASS",
+    "evidence": "docs/evidence/sdd-reviews.md"
+  },
+  "approval_note": "按用户要求准备完整规格包供一次具体审阅；未把路线确认推断为每阶段内容批准。"
+}

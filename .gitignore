@@ -1,0 +1,10 @@
+.tools/
+__pycache__/
+.pytest_cache/
+*.pyc
+.spikes/runtime/
+.tdd-state.json
+tdd-session.jsonl
+spec-contract-*.md
+dist/
+*.egg-info/

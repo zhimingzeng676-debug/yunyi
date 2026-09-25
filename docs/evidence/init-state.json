@@ -1,0 +1,6 @@
+{
+  "script": "init-state",
+  "exit_code": 0,
+  "stdout": "{\"stateFile\":\"D:\\\\codex\\\\云驿\\\\.spikes\\\\tdd_probe\\\\.tdd-state.json\",\"logFile\":\"D:\\\\codex\\\\云驿\\\\.spikes\\\\tdd_probe\\\\tdd-session.jsonl\",\"unitCount\":1,\"sessionId\":\"62528bfa-81b0-4736-9ee7-b8d490a87971\",\"config\":{\"effort\":\"high\",\"modelStrategy\":\"auto\",\"maxParallelPairs\":1,\"skipFailed\":false}}\n",
+  "stderr": ""
+}

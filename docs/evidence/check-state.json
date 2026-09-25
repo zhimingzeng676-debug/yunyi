@@ -1,0 +1,6 @@
+{
+  "script": "check-state",
+  "exit_code": 0,
+  "stdout": "{\"consistent\":true,\"violations\":[]}\n",
+  "stderr": ""
+}

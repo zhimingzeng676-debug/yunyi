@@ -1,0 +1,6 @@
+{
+  "script": "update-state",
+  "exit_code": 0,
+  "stdout": "{\"updated\":true,\"unitId\":\"window\",\"status\":4,\"updatedAt\":\"2026-09-25T20:00:12.246Z\",\"progress\":\"0/1 completed\"}\n",
+  "stderr": ""
+}

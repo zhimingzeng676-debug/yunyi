@@ -1,0 +1,19 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.14, pytest-9.1.1, pluggy-1.6.0 -- D:\anaconda3\envs\pack311\python.exe
+cachedir: .pytest_cache
+rootdir: D:\codex\云驿
+plugins: anyio-4.15.1, asyncio-1.4.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 8 items
+
+.spikes/test_dependencies.py::test_http_probe_distinguishes_auth_from_reachability PASSED [ 12%]
+.spikes/test_dependencies.py::test_windows_parent_pause_does_not_pause_child PASSED [ 25%]
+.spikes/test_dependencies.py::test_sqlite_single_claim_and_crash_rollback PASSED [ 37%]
+.spikes/test_dependencies.py::test_external_side_effect_survives_database_rollback PASSED [ 50%]
+.spikes/test_dependencies.py::test_argv_shell_metacharacters_remain_literal PASSED [ 62%]
+.spikes/test_dependencies.py::test_snapshot_preserves_dirty_bytes_and_detects_conflict PASSED [ 75%]
+.spikes/test_dependencies.py::test_mcp_stdio_handshake_schema_call_and_error PASSED [ 87%]
+.spikes/test_dependencies.py::test_cli_dependency_smoke PASSED           [100%]
+
+----- generated xml file: D:\codex\云驿\docs\evidence\dependency-spikes.xml -----
+============================= 8 passed in 11.46s ==============================

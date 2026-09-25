@@ -1,0 +1,69 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.14, pytest-9.1.1, pluggy-1.6.0 -- D:\anaconda3\envs\pack311\python.exe
+cachedir: .pytest_cache
+rootdir: D:\codex\云驿
+plugins: anyio-4.15.1, asyncio-1.4.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 8 items
+
+.spikes/test_dependencies.py::test_http_probe_distinguishes_auth_from_reachability PASSED [ 12%]
+.spikes/test_dependencies.py::test_windows_parent_pause_does_not_pause_child PASSED [ 25%]
+.spikes/test_dependencies.py::test_sqlite_single_claim_and_crash_rollback PASSED [ 37%]
+.spikes/test_dependencies.py::test_external_side_effect_survives_database_rollback PASSED [ 50%]
+.spikes/test_dependencies.py::test_argv_shell_metacharacters_remain_literal PASSED [ 62%]
+.spikes/test_dependencies.py::test_snapshot_preserves_dirty_bytes_and_detects_conflict PASSED [ 75%]
+.spikes/test_dependencies.py::test_mcp_stdio_handshake_schema_call_and_error FAILED [ 87%]
+.spikes/test_dependencies.py::test_cli_dependency_smoke PASSED           [100%]
+
+================================== FAILURES ===================================
+_______________ test_mcp_stdio_handshake_schema_call_and_error ________________
+  + Exception Group Traceback (most recent call last):
+  |   File "D:\codex\云驿\.spikes\test_dependencies.py", line 187, in test_mcp_stdio_handshake_schema_call_and_error
+  |     asyncio.run(exercise())
+  |   File "D:\anaconda3\envs\pack311\Lib\asyncio\runners.py", line 190, in run
+  |     return runner.run(main)
+  |            ^^^^^^^^^^^^^^^^
+  |   File "D:\anaconda3\envs\pack311\Lib\asyncio\runners.py", line 118, in run
+  |     return self._loop.run_until_complete(task)
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "D:\anaconda3\envs\pack311\Lib\asyncio\base_events.py", line 654, in run_until_complete
+  |     return future.result()
+  |            ^^^^^^^^^^^^^^^
+  |   File "D:\codex\云驿\.spikes\test_dependencies.py", line 175, in exercise
+  |     async with stdio_client(params) as (read, write):
+  |   File "D:\anaconda3\envs\pack311\Lib\contextlib.py", line 231, in __aexit__
+  |     await self.gen.athrow(typ, value, traceback)
+  |   File "D:\codex\云驿\.tools\python\mcp\client\stdio\__init__.py", line 182, in stdio_client
+  |     async with (
+  |   File "D:\codex\云驿\.tools\python\anyio\_backends\_asyncio.py", line 847, in __aexit__
+  |     raise BaseExceptionGroup(
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Exception Group Traceback (most recent call last):
+    |   File "D:\codex\云驿\.tools\python\mcp\client\stdio\__init__.py", line 189, in stdio_client
+    |     yield read_stream, write_stream
+    |   File "D:\codex\云驿\.spikes\test_dependencies.py", line 176, in exercise
+    |     async with ClientSession(read, write, read_timeout_seconds=timedelta(seconds=10)) as session:
+    |   File "D:\codex\云驿\.tools\python\anyio\_backends\_asyncio.py", line 847, in __aexit__
+    |     raise BaseExceptionGroup(
+    | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+    +-+---------------- 1 ----------------
+      | Traceback (most recent call last):
+      |   File "D:\codex\云驿\.spikes\test_dependencies.py", line 184, in exercise
+      |     assert result.structuredContent == {'session_id': 'spike', 'value': 7}
+      | AssertionError: assert None == {'session_id': 'spike', 'value': 7}
+      |  +  where None = CallToolResult(meta=None, content=[TextContent(type='text', text='{\n  "session_id": "spike",\n  "value": 7\n}', annotations=None, meta=None)], structuredContent=None, isError=False).structuredContent
+      +------------------------------------
+---------------------------- Captured stderr call -----------------------------
+[09/26/26 03:58:18] INFO     Processing request of type           server.py:733
+
+                             ListToolsRequest                                  
+
+                    INFO     Processing request of type           server.py:733
+
+                             CallToolRequest                                   
+
+----- generated xml file: D:\codex\云驿\docs\evidence\dependency-spikes.xml -----
+=========================== short test summary info ===========================
+FAILED .spikes/test_dependencies.py::test_mcp_stdio_handshake_schema_call_and_error
+======================== 1 failed, 7 passed in 10.97s =========================

@@ -1,0 +1,12 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.14, pytest-9.1.1, pluggy-1.6.0 -- D:\anaconda3\envs\pack311\python.exe
+cachedir: .pytest_cache
+rootdir: D:\codex\云驿
+plugins: anyio-4.15.1, asyncio-1.4.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+.spikes/test_dependencies.py::test_windows_job_closes_owned_process_tree PASSED [100%]
+
+-------- generated xml file: D:\codex\云驿\docs\evidence\windows-job.xml --------
+============================== 1 passed in 3.42s ==============================

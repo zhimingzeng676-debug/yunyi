@@ -1,0 +1,25 @@
+{
+  "scope": "dependency_and_workflow_spikes_only",
+  "strict_red": true,
+  "red_cases": {
+    "failed": 18,
+    "passed": 12
+  },
+  "green_cases": 30,
+  "test_hash_unchanged": true,
+  "changed_test_rejected": true,
+  "invalid_runner_no_junit_rejected": true,
+  "non_test_exit_codes_rejected": true,
+  "live_minimum_requests": {
+    "claude": {
+      "ready": true,
+      "elapsed_seconds": 5.28
+    },
+    "codex": {
+      "ready": true,
+      "elapsed_seconds": 18.98
+    }
+  },
+  "product_implemented": false,
+  "minimum_product_loop_verified": false
+}

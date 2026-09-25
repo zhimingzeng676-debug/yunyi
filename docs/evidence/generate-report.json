@@ -1,0 +1,6 @@
+{
+  "script": "generate-report",
+  "exit_code": 0,
+  "stdout": "{\"reportPath\":\"D:\\\\codex\\\\云驿\\\\.spikes\\\\tdd_probe/tdd-report.md\",\"reportLength\":1106}\n",
+  "stderr": ""
+}

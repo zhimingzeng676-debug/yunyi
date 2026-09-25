@@ -1,0 +1,15 @@
+{
+  "exit_code": 1,
+  "result": {
+    "status": "failed",
+    "testFilesUnchanged": false,
+    "changedFiles": [
+      "test_window.py"
+    ],
+    "skipMarkersFound": [],
+    "testsPassed": true,
+    "testOutput": "..............................                                           [100%]\r\n30 passed in 0.16s\r\n",
+    "exitCode": 0,
+    "tscCheck": null
+  }
+}

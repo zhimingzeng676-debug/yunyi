@@ -1,0 +1,6 @@
+{
+  "script": "log-event",
+  "exit_code": 0,
+  "stdout": "{\"logged\":true,\"event\":\"unit.completed\"}\n",
+  "stderr": ""
+}

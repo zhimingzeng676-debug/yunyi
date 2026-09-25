@@ -1,0 +1,6 @@
+{
+  "script": "update-state",
+  "exit_code": 0,
+  "stdout": "{\"updated\":true,\"unitId\":\"window\",\"status\":8,\"updatedAt\":\"2026-09-25T20:21:47.372Z\",\"progress\":\"1/1 completed\",\"allUnitsComplete\":true,\"nextPhase\":\"Phase 5: Run full test suite and holistic spec review, then Phase 6: check-state.ts followed by generate-report.ts.\"}\n",
+  "stderr": ""
+}
